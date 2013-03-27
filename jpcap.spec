@@ -41,10 +41,15 @@ export OSTYPE MAKE_HOME CLASSPATH
 %{__make} clean
 %{__make}
 
+export RELEASE_HOME=`pwd`
+make -C src/java/net/sourceforge/jpcap release
+
 %install
 rm -rf $RPM_BUILD_ROOT
 
-export RELEASE_HOME=.
+MAKE_HOME=`pwd`/make
+RELEASE_HOME=`pwd`
+export RELEASE_HOME MAKE_HOME
 %{__make} setup_pkgroot \
 	PKG_ROOT=$RPM_BUILD_ROOT
 
