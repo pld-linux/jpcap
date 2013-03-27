@@ -46,12 +46,15 @@ make -C src/java/net/sourceforge/jpcap release
 
 %install
 rm -rf $RPM_BUILD_ROOT
+install -d $RPM_BUILD_ROOT%{_libdir}
 
 MAKE_HOME=`pwd`/make
 RELEASE_HOME=`pwd`
 export RELEASE_HOME MAKE_HOME
 %{__make} setup_pkgroot \
-	PKG_ROOT=$RPM_BUILD_ROOT
+	PKG_ROOT=$RPM_BUILD_ROOT%{_prefix}
+
+[ "%{_lib}" != 'lib' ] && %{__mv} $RPM_BUILD_ROOT{%{_prefix}/lib/%{name}.so,%{_libdir}}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -62,4 +65,4 @@ rm -rf $RPM_BUILD_ROOT
 # src/java/net/sourceforge/jpcap/{tutorial,README}
 %attr(755,root,root) %{_bindir}/%{name}
 %attr(755,root,root) %{_libdir}/%{name}.so
-%{_libdir}/%{name}-%{version}
+%{_exec_prefix}/lib/%{name}-%{version}
